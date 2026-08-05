@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schedule a Call — Organic Sense</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.role-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;}
+.role-card{
+  padding:30px 22px;border:1px solid var(--line);border-radius:var(--r-md);text-align:center;
+  transition:.3s;
+}
+.role-card .ri{font-size:26px;margin-bottom:12px;}
+.role-card .rt{font-weight:800;font-size:16px;margin-bottom:4px;}
+.role-card .rs{font-size:12px;color:var(--gray-d);}
+.role-card.selected{background:var(--p-800);border-color:var(--p-800);color:var(--off);}
+.role-card.selected .rs{color:var(--p-200);}
+</style>
+</head>
+<body>
+
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<div class="form-progress" id="formProgress"></div>
+<div class="form-topbar">
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;">
+    <a href="index.html" class="logo"><span class="leaf">🍀</span> organic sense</a>
+    <div class="form-count"><span id="stepCounter">00</span> / 07 answered</div>
+  </div>
+</div>
+
+<div class="form-shell">
+  <div class="form-wrap">
+
+    <form id="briefForm">
+      <div class="form-step active" data-step="1">
+        <div class="fs-num">01</div>
+        <h2>Are you a <em>brand</em> or a <em>creator?</em></h2>
+        <div class="role-cards" id="roleCards">
+          <div class="role-card" data-role="brand" data-hover>
+            <div class="rt">I'm a Brand</div><div class="rs">Looking to run a campaign</div>
+          </div>
+          <div class="role-card" data-role="creator" data-hover>
+            <div class="rt">I'm a Creator</div><div class="rs">Looking to collaborate</div>
+          </div>
+        </div>
+        <div class="form-nav"><span class="fn-hint">Pick one to continue</span><button type="button" class="btn btn-primary" data-hover-big onclick="nextStep(1)">Next →</button></div>
+      </div>
+
+      <div class="form-step" data-step="2">
+        <div class="fs-num">02</div>
+        <h2>What's your <em>name?</em></h2>
+        <p class="fs-help">Let's start with an introduction.</p>
+        <div class="form-field"><label>Full name</label><input type="text" id="f-name" placeholder="e.g. Priya Nair" data-hover></div>
+        <div class="form-nav"><button type="button" class="btn btn-ghost" data-hover-big onclick="prevStep(2)">← Back</button><button type="button" class="btn btn-primary" data-hover-big onclick="nextStep(2)">Next →</button></div>
+      </div>
+
+      <div class="form-step" data-step="3">
+        <div class="fs-num">03</div>
+        <h2>How do we <em>reach you?</em></h2>
+        <p class="fs-help">Your quote and next steps will land here.</p>
+        <div class="form-field"><label>Phone number</label><input type="tel" id="f-phone" placeholder="e.g. +91 98765 43210" data-hover></div>
+        <div class="form-field"><label>Email address</label><input type="email" id="f-email" placeholder="e.g. you@email.com" data-hover></div>
+        <div class="form-nav"><button type="button" class="btn btn-ghost" data-hover-big onclick="prevStep(3)">← Back</button><button type="button" class="btn btn-primary" data-hover-big onclick="nextStep(3)">Next →</button></div>
+      </div>
+
+      <div class="form-step" data-step="4">
+        <div class="fs-num">04</div>
+        <h2 id="h4"><em>Details</em></h2>
+        <p class="fs-help" id="p4">A little more about you.</p>
+        <div id="brandInfo" class="role-block">
+          <div class="form-field"><label>Company name</label><input type="text" id="f-company" placeholder="e.g. Plōm Goodness" data-hover></div>
+          <div class="form-field"><label>Company website</label><input type="text" id="f-website" placeholder="e.g. www.yourbrand.com" data-hover></div>
+        </div>
+        <div id="creatorInfo" class="role-block" style="display:none;">
+          <div class="form-field"><label>Instagram / social handle</label><input type="text" id="f-handle" placeholder="e.g. @yourhandle" data-hover></div>
+          <div class="form-field"><label>Primary niche</label><input type="text" id="f-niche" placeholder="e.g. Beauty, Fitness, Tech" data-hover></div>
+        </div>
+        <div class="form-nav"><button type="button" class="btn btn-ghost" data-hover-big onclick="prevStep(4)">← Back</button><button type="button" class="btn btn-primary" data-hover-big onclick="nextStep(4)">Next →</button></div>
+      </div>
+
+      <div class="form-step" data-step="5">
+        <div class="fs-num">05</div>
+        <h2 id="h5">What do you <em>need?</em></h2>
+        <p class="fs-help">Select up to 3 that fit best.</p>
+        <div class="chip-group role-block" id="brandChips">
+          <div class="chip" data-hover>Campaign Strategy</div>
+          <div class="chip" data-hover>Creator Matching</div>
+          <div class="chip" data-hover>Content Oversight</div>
+          <div class="chip" data-hover>Paid Amplification</div>
+          <div class="chip" data-hover>Full-Service Management</div>
+        </div>
+        <div class="chip-group role-block" id="creatorChips" style="display:none;">
+          <div class="chip" data-hover>Paid Collabs</div>
+          <div class="chip" data-hover>Gifting</div>
+          <div class="chip" data-hover>Long-term Partnership</div>
+          <div class="chip" data-hover>Affiliate / UGC</div>
+          <div class="chip" data-hover>Event Appearances</div>
+        </div>
+        <div class="form-nav"><button type="button" class="btn btn-ghost" data-hover-big onclick="prevStep(5)">← Back</button><button type="button" class="btn btn-primary" data-hover-big onclick="nextStep(5)">Next →</button></div>
+      </div>
+
+      <div class="form-step" data-step="6">
+        <div class="fs-num">06</div>
+        <h2 id="h6">Tell us <em>more</em></h2>
+        <p class="fs-help" id="p6">Goals, timeline, references, budget — anything that helps.</p>
+        <div class="form-field"><textarea id="f-desc" placeholder="Tell us a little more..." data-hover></textarea></div>
+        <div class="form-nav"><button type="button" class="btn btn-ghost" data-hover-big onclick="prevStep(6)">← Back</button><button type="button" class="btn btn-primary" data-hover-big onclick="nextStep(6)">Next →</button></div>
+      </div>
+
+      <div class="form-step" data-step="7">
+        <div class="fs-num">07</div>
+        <h2>Ready to <em>send?</em></h2>
+        <p class="fs-help">We respond to every brief within 24 hours. Your details stay between you and Organic Sense.</p>
+        <div class="form-nav"><button type="button" class="btn btn-ghost" data-hover-big onclick="prevStep(7)">← Back</button><button type="button" class="btn btn-primary" data-hover-big onclick="submitForm()">Send Your Brief</button></div>
+      </div>
+    </form>
+
+    <div class="form-step form-done" id="doneScreen">
+      <div class="fd-icon">✓</div>
+      <h2 style="text-align:center;">Brief <em>received.</em></h2>
+      <p class="fs-help" style="text-align:center;">Thank you for reaching out to Organic Sense. Our team will review this and get back to you within 24 hours.</p>
+      <div style="text-align:center;margin-top:20px;"><a href="index.html" class="btn btn-ghost" data-hover-big>← Back to Home</a></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+let current=1;
+const totalSteps=7;
+let selectedRole=null;
+
+function updateProgress(answered){
+  document.getElementById('formProgress').style.width=(answered/totalSteps*100)+'%';
+  document.getElementById('stepCounter').textContent=String(answered).padStart(2,'0');
+}
+function showStep(n){
+  document.querySelectorAll('.form-step[data-step]').forEach(s=>{
+    s.classList.toggle('active', Number(s.dataset.step)===n);
+  });
+  current=n;
+}
+function nextStep(from){
+  if(!validateStep(from)) return;
+  updateProgress(from);
+  if(from<totalSteps) showStep(from+1);
+}
+function prevStep(from){ showStep(from-1); }
+
+/* role selection */
+document.querySelectorAll('.role-card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedRole=card.dataset.role;
+    applyRole();
+  });
+});
+function applyRole(){
+  const isBrand=selectedRole==='brand';
+  document.getElementById('brandInfo').style.display=isBrand?'block':'none';
+  document.getElementById('creatorInfo').style.display=isBrand?'none':'block';
+  document.getElementById('brandChips').style.display=isBrand?'flex':'none';
+  document.getElementById('creatorChips').style.display=isBrand?'none':'flex';
+  document.getElementById('h4').innerHTML=isBrand? "Tell us about <em>your brand</em>" : "Tell us about <em>you</em>";
+  document.getElementById('p4').textContent=isBrand? "The company we'll be building for — we'll study it before we talk." : "So we know who we'd be working with.";
+  document.getElementById('h5').innerHTML=isBrand? "What do you <em>need?</em>" : "What are you <em>open to?</em>";
+  document.getElementById('h6').innerHTML=isBrand? "Describe your <em>project</em>" : "Tell us about <em>your content</em>";
+  document.getElementById('p6').textContent=isBrand? "Goals, timeline, references, budget range — anything that helps us understand the brief." : "Your niche, past brand collabs, and what kind of partnerships you're looking for.";
+  document.getElementById('f-desc').placeholder=isBrand? "Tell us about the project..." : "Tell us about your content and audience...";
+  selectedChips=[];
+  document.querySelectorAll('.chip.selected').forEach(c=>c.classList.remove('selected'));
+}
+
+function validateStep(n){
+  if(n===1){
+    if(!selectedRole){ document.getElementById('roleCards').style.outline='1px solid #c0392b'; return false; }
+  }
+  if(n===2){
+    const v=document.getElementById('f-name').value.trim();
+    if(!v){ flash('f-name'); return false; }
+  }
+  if(n===3){
+    const p=document.getElementById('f-phone').value.trim();
+    const e=document.getElementById('f-email').value.trim();
+    if(!p){ flash('f-phone'); return false; }
+    if(!e || !e.includes('@')){ flash('f-email'); return false; }
+  }
+  if(n===4){
+    if(selectedRole==='brand'){
+      const c=document.getElementById('f-company').value.trim();
+      if(!c){ flash('f-company'); return false; }
+    } else {
+      const h=document.getElementById('f-handle').value.trim();
+      if(!h){ flash('f-handle'); return false; }
+    }
+  }
+  if(n===5){
+    if(selectedChips.length===0){
+      const g=selectedRole==='brand'?'brandChips':'creatorChips';
+      document.getElementById(g).style.outline='1px solid #c0392b';
+      return false;
+    }
+  }
+  if(n===6){
+    const d=document.getElementById('f-desc').value.trim();
+    if(d.length<10){ flash('f-desc'); return false; }
+  }
+  return true;
+}
+function flash(id){
+  const el=document.getElementById(id);
+  el.style.borderColor='#c0392b';
+  el.focus();
+  setTimeout(()=>{ el.style.borderColor=''; },1200);
+}
+
+/* chip select, max 3 */
+let selectedChips=[];
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    const label=chip.textContent;
+    if(chip.classList.contains('selected')){
+      chip.classList.remove('selected');
+      selectedChips=selectedChips.filter(c=>c!==label);
+    } else {
+      if(selectedChips.length>=3) return;
+      chip.classList.add('selected');
+      selectedChips.push(label);
+    }
+    document.getElementById('brandChips').style.outline='none';
+    document.getElementById('creatorChips').style.outline='none';
+  });
+});
+
+function submitForm(){
+  if(!validateStep(7)) return;
+  updateProgress(7);
+  document.getElementById('briefForm').style.display='none';
+  document.getElementById('doneScreen').classList.add('active');
+}
+</script>
+</body>
+</html>
